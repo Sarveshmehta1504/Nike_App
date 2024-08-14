@@ -35,7 +35,7 @@ fun getProductList(): List<Product>{
             color = Color.Magenta,
             discountPrice = 1000f,
             rating = 4.7f,
-            imageRes = R.drawable.s_1,
+            imageRes = R.drawable.s_4,
             size = 10
 
         ) ,
@@ -46,7 +46,7 @@ fun getProductList(): List<Product>{
         color = Color.Blue,
         discountPrice = 1000f,
         rating = 4.7f,
-        imageRes = R.drawable.s_2,
+        imageRes = R.drawable.s_5,
         size = 10
         ),
         Product(
@@ -56,7 +56,7 @@ fun getProductList(): List<Product>{
             color = Color.Green,
             discountPrice = 1000f,
             rating = 4.7f,
-            imageRes = R.drawable.s_3,
+            imageRes = R.drawable.s_9,
             size = 10
         ),Product(
             id ="4",
