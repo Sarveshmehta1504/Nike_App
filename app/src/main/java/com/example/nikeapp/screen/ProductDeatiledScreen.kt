@@ -12,16 +12,24 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.ShoppingCart
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,12 +57,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProductDetailedScreen(
-    productId: String = "5"
+    productId: String = "5",
+    navController: NavController
 ) {
     val product = getProductList().find {
         it.id == productId
@@ -88,6 +97,9 @@ fun ProductDetailedScreen(
     var selectedSize by remember {
         mutableStateOf(product.size.toString())
     }
+    var isFavorite by remember {
+        mutableStateOf(false)
+    }
     val animationProductScale = animateFloatAsState(targetValue = productScale, label = "")
     val animationProductRotate = animateFloatAsState(targetValue = productRotate, label = "")
     LaunchedEffect(true) {
@@ -113,7 +125,10 @@ fun ProductDetailedScreen(
 
         )
         IconButton(
-            onClick = {}, modifier = Modifier
+            onClick = {
+                navController.popBackStack()
+            },
+            modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp)
                 .shadow(
                     elevation = 24.dp,
@@ -199,26 +214,26 @@ fun ProductDetailedScreen(
                     fontWeight = FontWeight.Bold
                 ),
             )
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 6.dp)
                     .padding(horizontal = 22.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ){
-                ProductSizeCard(size= "8", isSelected = selectedSize == "8") {
+            ) {
+                ProductSizeCard(size = "8", isSelected = selectedSize == "8") {
                     selectedSize = "8"
                 }
-                ProductSizeCard(size= "9", isSelected = selectedSize == "9") {
+                ProductSizeCard(size = "9", isSelected = selectedSize == "9") {
                     selectedSize = "9"
                 }
-                ProductSizeCard(size= "10", isSelected = selectedSize == "10") {
+                ProductSizeCard(size = "10", isSelected = selectedSize == "10") {
                     selectedSize = "10"
                 }
-                ProductSizeCard(size= "11", isSelected = selectedSize == "11") {
+                ProductSizeCard(size = "11", isSelected = selectedSize == "11") {
                     selectedSize = "11"
                 }
-                ProductSizeCard(size= "12", isSelected = selectedSize == "12") {
+                ProductSizeCard(size = "12", isSelected = selectedSize == "12") {
                     selectedSize = "12"
                 }
             }
@@ -240,7 +255,7 @@ fun ProductDetailedScreen(
                     .padding(top = 6.dp)
                     .padding(horizontal = 22.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ){
+            ) {
                 ProductColor(color = Color.Red, isSelected = selectedColor == Color.Red) {
                     selectedColor = Color.Red
                 }
@@ -255,6 +270,48 @@ fun ProductDetailedScreen(
                 }
                 ProductColor(color = Color.Cyan, isSelected = selectedColor == Color.Cyan) {
                     selectedColor = Color.Cyan
+                }
+            }
+            Text(
+                text = "Inspired by the original AJ1, the Air Jordan 1 Mid offers fans a chance to follow in MJ's footsteps. Fresh colour trims the clean, classic materials, imbuing modernity into a classic design.\n" +
+                        "\n",
+                modifier = Modifier
+                    .padding(top = 6.dp)
+                    .padding(horizontal = 22.dp),
+                color = Color.Black,
+                fontWeight = FontWeight.Light,
+                style=TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp)
+                    .padding(horizontal = 22.dp),
+            ){
+                IconButton(
+                    onClick = { isFavorite = !isFavorite }
+                ) {
+                    Icon(
+                        imageVector = if(isFavorite) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                        contentDescription = null,
+                        tint = if(isFavorite) Color.Red else MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                Spacer(modifier = Modifier.width(4.dp))
+                Button (
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .padding(start = 8.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Blue
+                    )
+                ) {
+                    Icon(imageVector = Icons.Rounded.ShoppingCart, contentDescription = null)
+                    Text(text = "Add to Cart")
                 }
             }
         }
@@ -284,7 +341,8 @@ fun ProductSizeCard(
             .border(
                 width = border,
                 color = Color.Black,
-                shape = RoundedCornerShape(12.dp))
+                shape = RoundedCornerShape(12.dp)
+            )
             .background(backGroundColor)
             .clickable { onClick() }
             .padding(12.dp),
@@ -292,9 +350,10 @@ fun ProductSizeCard(
         color = textColor
     )
 }
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun Test(){
+fun Test() {
     ProductColor(color = Color.Yellow, isSelected = false) { }
 }
 
@@ -304,8 +363,8 @@ fun ProductColor(
     color: Color,
     isSelected: Boolean,
     onClick: () -> Unit
-){
-    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary  else Color.Transparent
+) {
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
     Box(
         modifier = modifier
             .size(24.dp)
@@ -313,9 +372,11 @@ fun ProductColor(
             .background(color, shape = CircleShape)
             .border(width = 0.5.dp, color = borderColor, shape = CircleShape)
             .clip(CircleShape)
-            .clickable { onClick(
+            .clickable {
+                onClick(
 
-            ) }
+                )
+            }
 
     )
 

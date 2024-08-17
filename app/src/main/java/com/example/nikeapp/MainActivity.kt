@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.nikeapp.navigation.AppNavHost
 import com.example.nikeapp.screen.ProductScreen
 import com.example.nikeapp.ui.theme.NikeAppTheme
 
@@ -20,7 +21,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NikeAppTheme {
-                ProductScreen()
+                Scaffold (
+                    modifier = Modifier.fillMaxSize(),
+                ){
+                    innerPadding ->
+                    AppNavHost(modifier = Modifier.padding(innerPadding))
+                }
             }
         }
     }

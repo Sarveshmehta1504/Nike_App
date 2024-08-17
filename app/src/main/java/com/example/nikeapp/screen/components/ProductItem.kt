@@ -2,6 +2,7 @@ package com.example.nikeapp.screen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,7 +50,8 @@ fun ProductItem(
         imageRes = R.drawable.s_9,
         size = 10
 
-    )
+    ),
+    onClick:() ->Unit ={}
 ){
     var color by remember {
         mutableStateOf(product.color)
@@ -61,6 +63,9 @@ fun ProductItem(
         modifier = Modifier
             .padding(20.dp)
             .size(168.dp,210.dp)
+            .clickable {
+                onClick.invoke()
+            }
     ){
             Box(
                 modifier = Modifier
